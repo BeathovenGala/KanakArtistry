@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, Calendar, Tag, DollarSign, MessageSquare, X, RefreshCw } from 'lucide-react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 interface Inquiry {
-  id: string;
+  id: number;
   name: string;
   email: string;
   phone: string;
-  artType: string;
+  art_type: string;
   size: string;
   budget: string;
   timeline: string;
   message: string;
   status: string;
-  createdAt: string;
+  submitted_at: string;
 }
 
 interface AdminDashboardProps {
@@ -33,22 +33,16 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-ac147f29/inquiries`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-          },
-        }
-      );
+      const { data, error: supabaseError } = await supabase
+        .from('queries')
+        .select('*')
+        .order('submitted_at', { ascending: false });
 
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to fetch inquiries');
+      if (supabaseError) {
+        throw supabaseError;
       }
 
-      setInquiries(data.inquiries);
+      setInquiries(data || []);
     } catch (err) {
       console.error('Error fetching inquiries:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch inquiries');
@@ -91,11 +85,15 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+    >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="bg-white rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-[var(--color-primary-teal)] to-[var(--color-accent-coral)] text-white p-8">
@@ -116,12 +114,15 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
               >
                 <RefreshCw size={20} />
               </motion.button>
-              <button
+              <motion.button
                 onClick={onClose}
-                className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-colors"
+                className="p-3 bg-white/20 hover:bg-red-500 rounded-full transition-all duration-300 group"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title="Close Dashboard"
               >
-                <X size={24} />
-              </button>
+                <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
+              </motion.button>
             </div>
           </div>
         </div>
@@ -162,7 +163,7 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
                     <div>
                       <h5 className="mb-1">{inquiry.name}</h5>
                       <p className="text-sm text-[var(--color-neutral-gray)]">
-                        {formatDate(inquiry.createdAt)}
+                        {formatDate(inquiry.submitted_at)}
                       </p>
                     </div>
                     <span className="px-4 py-1 bg-[var(--color-primary-teal)] text-white rounded-full text-sm">
@@ -183,7 +184,7 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
                     )}
                     <div className="flex items-center gap-3">
                       <Tag size={16} className="text-[var(--color-primary-teal)]" />
-                      <p className="text-sm">{getArtTypeName(inquiry.artType)}</p>
+                      <p className="text-sm">{getArtTypeName(inquiry.art_type)}</p>
                     </div>
                     {inquiry.timeline && (
                       <div className="flex items-center gap-3">
@@ -220,7 +221,7 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="text-white mb-2">{selectedInquiry.name}</h3>
-                  <p className="text-white/90">{formatDate(selectedInquiry.createdAt)}</p>
+                  <p className="text-white/90">{formatDate(selectedInquiry.submitted_at)}</p>
                 </div>
                 <button
                   onClick={() => setSelectedInquiry(null)}
@@ -263,7 +264,7 @@ export function AdminDashboard({ isOpen, onClose }: AdminDashboardProps) {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-[var(--color-neutral-gray)] mb-1">Art Type</p>
-                    <p>{getArtTypeName(selectedInquiry.artType)}</p>
+                    <p>{getArtTypeName(selectedInquiry.art_type)}</p>
                   </div>
                   {selectedInquiry.size && (
                     <div>

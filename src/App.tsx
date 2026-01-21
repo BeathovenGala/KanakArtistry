@@ -7,15 +7,18 @@ import { Contact } from './components/Contact';
 import { InquiryModal } from './components/InquiryModal';
 import { Footer } from './components/Footer';
 import { AdminDashboard } from './components/AdminDashboard';
+import { trackVisitor } from './utils/supabase/client';
 
 export default function App() {
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
   const [artworkType, setArtworkType] = useState('');
 
-  // Set page title
+  // Set page title and track visitor on mount
   useEffect(() => {
     document.title = 'KanakArtistry - Unique Art for Your Space';
+    // Track visitor when app loads
+    trackVisitor();
   }, []);
 
   // Secret key combination to open admin dashboard: Ctrl/Cmd + Shift + A

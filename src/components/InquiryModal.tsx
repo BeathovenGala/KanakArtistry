@@ -1,15 +1,16 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { saveInquiry } from '../utils/supabase/client';
 
 interface InquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialArtType?: string;
+  initialMedium?: string;
 }
 
-export function InquiryModal({ isOpen, onClose, initialArtType = '' }: InquiryModalProps) {
+export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedium = '' }: InquiryModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -37,25 +38,9 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '' }: InquiryMo
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-ac147f29/inquiries`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      await saveInquiry(formData);
 
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to submit inquiry');
-      }
-
-      console.log('Inquiry submitted successfully:', data.inquiryId);
+      console.log('Inquiry submitted successfully');
       setIsSubmitted(true);
       
       setTimeout(() => {
