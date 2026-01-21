@@ -59,6 +59,12 @@
     build: {
       target: 'esnext',
       outDir: 'build',
+      assetsInlineLimit: 0,
+      rollupOptions: {
+        output: {
+          assetFileNames: 'assets/[name].[hash][extname]',
+        },
+      },
     },
     server: {
       port: 3000,

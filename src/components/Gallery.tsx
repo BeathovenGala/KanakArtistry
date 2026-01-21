@@ -1,55 +1,96 @@
 import { motion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import artwork1 from 'figma:asset/29b3d1a687d8aa67fd4fceb65df6ca00f8b650ca.png';
-import artwork2 from 'figma:asset/745310027211ed9d399381cde224974558251b8b.png';
-import artwork3 from 'figma:asset/c16d1a5500838cea86ac7584938ff71889ffb00f.png';
-import artwork4 from 'figma:asset/b09ec96ea3306adf9c1898df5a535cf4a8e00fbd.png';
-import artwork5 from 'figma:asset/6388cd32bbb603009d74ce48ffe257e7a59595c4.png';
-import artwork6 from 'figma:asset/50e456d53c5a5096e98c7d05750c57cb66426350.png';
+import { LazyImage } from './ui/LazyImage';
+import artwork1 from '../assets/living_tree_of_grace.png';
+import artwork2 from '../assets/Garden_of_living_light.png';
+import artwork3 from '../assets/Light of the Lord.png';
+import artwork4 from '../assets/Tree of Abundance.jpeg';
+import artwork5 from '../assets/The sacred rise of the lotus.jpeg';
+import artwork6 from '../assets/Above the garden dream.png';
+import artwork7 from '../assets/Divya Gyaan.png';
+import artwork8 from '../assets/Circle of Harmony.png';
+import artwork9 from '../assets/Night Bloom.jpeg';
+import artwork10 from '../assets/Tree of Timeless Balance.jpeg';
+import artwork11 from '../assets/A Journey of Eternal Love & Divine Blessings.jpeg';
 
 const artworks = [
   {
     id: 1,
     image: artwork1,
-    title: 'Cherry Blossom Dreams',
-    medium: 'Mixed Media & Relief Art',
-    description: 'A textured celebration of nature with three-dimensional cherry blossoms on a turquoise canvas.',
+    title: 'The Living Tree of Grace',
+    medium: 'Canvas Painting',
+    description: 'A vibrant, detailed Tree of Life on a sky-blue and white textured background. This auspicious tree reflects the flow of life, growth, and harmony, bringing prosperity, positivity, and the fulfillment of wishes.',
   },
   {
     id: 2,
     image: artwork2,
-    title: 'Tree of Life',
-    medium: 'Madhubani Folk Art',
-    description: 'Traditional Indian folk art featuring intricate patterns and symbolic tree motifs.',
+    title: 'Garden of Living Light',
+    medium: 'Canvas Painting',
+    description: 'A vibrant garden of flowers against a peach and sky-blue background, with golden dots shimmering like energy—reflecting growth, vitality, and the blossoming of life\'s potential.',
   },
   {
     id: 3,
     image: artwork3,
-    title: 'Starlit Lotus',
-    medium: 'Acrylic Painting',
-    description: 'Contemporary interpretation of lotus flowers against a celestial backdrop.',
+    title: 'Light of the Lord',
+    medium: 'Canvas Painting',
+    description: 'A textured canvas painting with Shrinathji\'s face at the center, radiating amidst the glory of the sun. This artwork captures divine light, devotion, and spiritual brilliance.',
   },
   {
     id: 4,
     image: artwork4,
-    title: 'Sacred Circle',
-    medium: 'Madhubani Folk Art',
-    description: 'Intricate mandala design featuring the tree of life surrounded by traditional motifs and vibrant birds.',
+    title: 'Tree of Abundance',
+    medium: 'Canvas Painting',
+    description: 'A radiant Tree of Life glowing with a golden aura, adorned with vibrant, blooming flowers and graceful golden birds. This artwork reflects divine balance, growth, and the eternal movement of energy through nature.',
   },
   {
     id: 5,
     image: artwork5,
-    title: 'Divine Journey',
-    medium: 'Warli & Folk Fusion',
-    description: 'A majestic depiction of divine figures on a chariot against a golden sunset, blending traditional storytelling.',
+    title: 'The Sacred Rise of the Lotus',
+    medium: 'Canvas Painting',
+    description: 'A canvas painting of lotuses and their leaves rising toward the light, created with intricate dot work, reflecting purity, growth, and quiet strength.',
   },
   {
     id: 6,
     image: artwork6,
-    title: 'Garden of Serenity',
-    medium: 'Contemporary Mixed Media',
-    description: 'A peaceful triptych showcasing nature\'s beauty with intricate details of flora, fauna, and wildlife.',
+    title: 'Above the Garden Dream',
+    medium: 'Canvas Painting',
+    description: 'A canvas painting with a purple background, featuring butterflies and leaves as if seen from above, capturing the mesmerizing beauty and quiet wonder of nature.',
+  },
+  {
+    id: 7,
+    image: artwork7,
+    title: 'Divya Gyaan',
+    medium: 'Painting on MDF',
+    description: 'A painting depicting Arjuna and Krishna from the Mahabharata, with Krishna imparting wisdom to Arjuna. Embossed chariot details, surrounding greenery, golden backgrounds, and soft clouds create a pure, serene aura, symbolizing a fresh, receptive mind ready to embrace divine knowledge.',
+  },
+  {
+    id: 8,
+    image: artwork8,
+    title: 'Circle of Harmony',
+    medium: 'Gond-style Mandala',
+    description: 'A Gond-style Tree of Life mandala painting on handmade paper, featuring birds and branches that symbolize protection and harmony, with vibrant patterns reflecting the interconnected energy of life.',
+  },
+  {
+    id: 9,
+    image: artwork9,
+    title: 'Night Bloom',
+    medium: 'Canvas Painting',
+    description: 'A detailed canvas painting of lotuses and leaves on a deep navy background with white dots like stars, showing calmness, purity, and quiet beauty.',
+  },
+  {
+    id: 10,
+    image: artwork10,
+    title: 'Tree of Timeless Balance',
+    medium: 'Pattachitra-style',
+    description: 'A Pattachitra-style Tree of Life on handmade paper, with upward-reaching branches and intricate detailing on a soft peach background, reflecting balance and growth.',
+  },
+  {
+    id: 11,
+    image: artwork11,
+    title: 'A Journey of Eternal Love & Divine Blessings',
+    medium: 'Triptych Canvas Paintings',
+    description: 'Three canvas paintings that are more than colors on canvas—they capture a soulful journey of love, faith, and divine protection.',
   },
 ];
 
@@ -94,7 +135,7 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
               className="group"
             >
               <div className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover">
-                <img
+                <LazyImage
                   src={art.image}
                   alt={art.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
