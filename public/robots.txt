@@ -1,0 +1,24 @@
+# KanakArtistry robots.txt
+# Allow all search engines to crawl
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /.well-known/acme-challenge/
+Disallow: /.git
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+Request-rate: 30/60
+
+# Sitemap location
+Sitemap: https://kanakartistry.com/sitemap.xml
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1

@@ -60,9 +60,23 @@
       target: 'esnext',
       outDir: 'build',
       assetsInlineLimit: 0,
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          passes: 2,
+        },
+      },
       rollupOptions: {
         output: {
           assetFileNames: 'assets/[name].[hash][extname]',
+          chunkFileNames: 'chunks/[name].[hash].js',
+          entryFileNames: '[name].[hash].js',
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-popover'],
+            'animation': ['motion/react'],
+          },
         },
       },
     },

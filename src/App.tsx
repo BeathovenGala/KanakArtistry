@@ -8,15 +8,37 @@ import { InquiryModal } from './components/InquiryModal';
 import { Footer } from './components/Footer';
 import { AdminDashboard } from './components/AdminDashboard';
 import { trackVisitor } from './utils/supabase/client';
+import { setSEOTags, organizationSchema, trackPageView } from './utils/seo';
 
 export default function App() {
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
   const [artworkType, setArtworkType] = useState('');
 
-  // Set page title and track visitor on mount
+  // Set page title, SEO tags, and track visitor on mount
   useEffect(() => {
-    document.title = 'KanakArtistry - Unique Art for Your Space';
+    // Set comprehensive SEO tags for home page
+    setSEOTags({
+      title: 'KanakArtistry | Handmade Art & Commission Services',
+      description: 'Discover authentic handmade artwork and commission services. Explore 11 unique handcrafted pieces including oil paintings, acrylic art, and mixed media.',
+      keywords: ['handmade art', 'oil painting', 'acrylic art', 'art commission', 'custom artwork'],
+      image: 'https://kanakartistry.com/og-image.jpg',
+      url: 'https://kanakartistry.com',
+      type: 'website'
+    });
+
+    // Add organization structured data
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(organizationSchema);
+    script.setAttribute('data-seo-script', 'organization');
+    const existingScript = document.querySelector('script[data-seo-script="organization"]');
+    if (existingScript) existingScript.remove();
+    document.head.appendChild(script);
+
+    // Track page view
+    trackPageView('/', 'Home - KanakArtistry');
+
     // Track visitor when app loads
     trackVisitor();
   }, []);

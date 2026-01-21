@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { LazyImage } from './ui/LazyImage';
+import { setSEOTags, createProductSchema } from '../utils/seo';
 import artwork1 from '../assets/living_tree_of_grace.png';
 import artwork2 from '../assets/Garden_of_living_light.png';
 import artwork3 from '../assets/Light of the Lord.png';
@@ -21,6 +22,7 @@ const artworks = [
     title: 'The Living Tree of Grace',
     medium: 'Canvas Painting',
     description: 'A vibrant, detailed Tree of Life on a sky-blue and white textured background. This auspicious tree reflects the flow of life, growth, and harmony, bringing prosperity, positivity, and the fulfillment of wishes.',
+    alt: 'The Living Tree of Grace - Vibrant tree of life painting on sky-blue and white textured background representing prosperity and harmony',
   },
   {
     id: 2,
@@ -28,6 +30,7 @@ const artworks = [
     title: 'Garden of Living Light',
     medium: 'Canvas Painting',
     description: 'A vibrant garden of flowers against a peach and sky-blue background, with golden dots shimmering like energy—reflecting growth, vitality, and the blossoming of life\'s potential.',
+    alt: 'Garden of Living Light - Vibrant garden flowers with golden shimmer on peach and sky-blue background symbolizing growth and vitality',
   },
   {
     id: 3,
@@ -35,6 +38,7 @@ const artworks = [
     title: 'Light of the Lord',
     medium: 'Canvas Painting',
     description: 'A textured canvas painting with Shrinathji\'s face at the center, radiating amidst the glory of the sun. This artwork captures divine light, devotion, and spiritual brilliance.',
+    alt: 'Light of the Lord - Shrinathji textured canvas painting with divine sun radiation and spiritual brilliance',
   },
   {
     id: 4,
@@ -42,6 +46,7 @@ const artworks = [
     title: 'Tree of Abundance',
     medium: 'Canvas Painting',
     description: 'A radiant Tree of Life glowing with a golden aura, adorned with vibrant, blooming flowers and graceful golden birds. This artwork reflects divine balance, growth, and the eternal movement of energy through nature.',
+    alt: 'Tree of Abundance - Radiant golden tree of life with blooming flowers and graceful birds representing divine balance and growth',
   },
   {
     id: 5,
@@ -49,6 +54,7 @@ const artworks = [
     title: 'The Sacred Rise of the Lotus',
     medium: 'Canvas Painting',
     description: 'A canvas painting of lotuses and their leaves rising toward the light, created with intricate dot work, reflecting purity, growth, and quiet strength.',
+    alt: 'The Sacred Rise of the Lotus - Spiritual lotus flower canvas painting with divine energy and intricate dot work',
   },
   {
     id: 6,
@@ -56,6 +62,7 @@ const artworks = [
     title: 'Above the Garden Dream',
     medium: 'Canvas Painting',
     description: 'A canvas painting with a purple background, featuring butterflies and leaves as if seen from above, capturing the mesmerizing beauty and quiet wonder of nature.',
+    alt: 'Above the Garden Dream - Ethereal landscape with floating flowers and celestial elements capturing natural beauty',
   },
   {
     id: 7,
@@ -63,6 +70,7 @@ const artworks = [
     title: 'Divya Gyaan',
     medium: 'Painting on MDF',
     description: 'A painting depicting Arjuna and Krishna from the Mahabharata, with Krishna imparting wisdom to Arjuna. Embossed chariot details, surrounding greenery, golden backgrounds, and soft clouds create a pure, serene aura, symbolizing a fresh, receptive mind ready to embrace divine knowledge.',
+    alt: 'Divya Gyaan - Divine knowledge spiritual artwork with Krishna and Arjuna from Mahabharata with embossed details and cosmic elements',
   },
   {
     id: 8,
@@ -70,6 +78,7 @@ const artworks = [
     title: 'Circle of Harmony',
     medium: 'Gond-style Mandala',
     description: 'A Gond-style Tree of Life mandala painting on handmade paper, featuring birds and branches that symbolize protection and harmony, with vibrant patterns reflecting the interconnected energy of life.',
+    alt: 'Circle of Harmony - Mandala-inspired art with symmetrical geometric and organic patterns representing cosmic order and unity',
   },
   {
     id: 9,
@@ -77,6 +86,7 @@ const artworks = [
     title: 'Night Bloom',
     medium: 'Canvas Painting',
     description: 'A detailed canvas painting of lotuses and leaves on a deep navy background with white dots like stars, showing calmness, purity, and quiet beauty.',
+    alt: 'Night Bloom - Nocturnal flowers and luminous plants against dark mystical background with star-like elements',
   },
   {
     id: 10,
@@ -84,6 +94,7 @@ const artworks = [
     title: 'Tree of Timeless Balance',
     medium: 'Pattachitra-style',
     description: 'A Pattachitra-style Tree of Life on handmade paper, with upward-reaching branches and intricate detailing on a soft peach background, reflecting balance and growth.',
+    alt: 'Tree of Timeless Balance - Symmetrical tree artwork representing eternal equilibrium and stability in Pattachitra style',
   },
   {
     id: 11,
@@ -91,6 +102,7 @@ const artworks = [
     title: 'A Journey of Eternal Love & Divine Blessings',
     medium: 'Triptych Canvas Paintings',
     description: 'Three canvas paintings that are more than colors on canvas—they capture a soulful journey of love, faith, and divine protection.',
+    alt: 'A Journey of Eternal Love & Divine Blessings - Spiritual journey artwork triptych with flowing energy and divine blessings',
   },
 ];
 
@@ -137,7 +149,8 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
               <div className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover">
                 <LazyImage
                   src={art.image}
-                  alt={art.title}
+                  alt={art.alt}
+                  title={art.description}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
