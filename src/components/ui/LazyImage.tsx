@@ -5,9 +5,22 @@ interface LazyImageProps {
   alt: string;
   className?: string;
   webpSrc?: string;
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  title?: string;
 }
 
-export function LazyImage({ src, alt, className = '', webpSrc }: LazyImageProps) {
+export function LazyImage({ 
+  src, 
+  alt, 
+  className = '', 
+  webpSrc, 
+  width, 
+  height,
+  loading = 'lazy',
+  title
+}: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -17,7 +30,11 @@ export function LazyImage({ src, alt, className = '', webpSrc }: LazyImageProps)
       <img
         src={src}
         alt={alt}
-        loading="lazy"
+        title={title}
+        width={width}
+        height={height}
+        loading={loading}
+        decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => setIsError(true)}
         className={`

@@ -59,7 +59,7 @@
     build: {
       target: 'esnext',
       outDir: 'build',
-      assetsInlineLimit: 0,
+      assetsInlineLimit: 4096, // Inline assets smaller than 4KB
       minify: 'terser',
       terserOptions: {
         compress: {
@@ -69,7 +69,14 @@
       },
       rollupOptions: {
         output: {
-          assetFileNames: 'assets/[name].[hash][extname]',
+          assetFileNames: (assetInfo) => {
+            // Add cache-busting for images
+            const info = assetInfo.name || '';
+            if (/\.(png|jpe?g|webp|svg|gif|ico)$/i.test(info)) {
+              return 'assets/images/[name].[hash][extname]';
+            }
+            return 'assets/[name].[hash][extname]';
+          },
           chunkFileNames: 'chunks/[name].[hash].js',
           entryFileNames: '[name].[hash].js',
           manualChunks: {

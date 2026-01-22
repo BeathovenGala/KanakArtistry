@@ -3,17 +3,17 @@ import { useRef, useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { LazyImage } from './ui/LazyImage';
 import { setSEOTags, createProductSchema } from '../utils/seo';
-import artwork1 from '../assets/living_tree_of_grace.png';
-import artwork2 from '../assets/Garden_of_living_light.png';
-import artwork3 from '../assets/Light of the Lord.png';
-import artwork4 from '../assets/Tree of Abundance.jpeg';
-import artwork5 from '../assets/The sacred rise of the lotus.jpeg';
-import artwork6 from '../assets/Above the garden dream.png';
-import artwork7 from '../assets/Divya Gyaan.png';
-import artwork8 from '../assets/Circle of Harmony.png';
-import artwork9 from '../assets/Night Bloom.jpeg';
-import artwork10 from '../assets/Tree of Timeless Balance.jpeg';
-import artwork11 from '../assets/A Journey of Eternal Love & Divine Blessings.jpeg';
+import artwork1 from '../assets/living_tree_of_grace.webp';
+import artwork2 from '../assets/Garden_of_living_light.webp';
+import artwork3 from '../assets/Light of the Lord.webp';
+import artwork4 from '../assets/Tree of Abundance.webp';
+import artwork5 from '../assets/The sacred rise of the lotus.webp';
+import artwork6 from '../assets/Above the garden dream.webp';
+import artwork7 from '../assets/Divya Gyaan.webp';
+import artwork8 from '../assets/Circle of Harmony.webp';
+import artwork9 from '../assets/Night Bloom.webp';
+import artwork10 from '../assets/Tree of Timeless Balance.webp';
+import artwork11 from '../assets/A Journey of Eternal Love & Divine Blessings.webp';
 
 const artworks = [
   {
@@ -151,6 +151,9 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
                   src={art.image}
                   alt={art.alt}
                   title={art.description}
+                  width={1400}
+                  height={1400}
+                  loading={index < 3 ? 'eager' : 'lazy'}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
