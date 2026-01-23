@@ -1760,3 +1760,42 @@
     transform: rotate(360deg);
   }
 }
+
+/* jQuery Lazy Loading Styles */
+img.lazy-load {
+  /* Placeholder background while image is loading */
+  background: linear-gradient(
+    135deg,
+    var(--color-neutral-light-gray) 0%,
+    var(--color-neutral-cream) 50%,
+    var(--color-neutral-light-gray) 100%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+img.lazy-load.loading {
+  opacity: 0.7;
+}
+
+img.lazy-load.loaded {
+  background: none;
+  animation: none;
+}
+
+img.lazy-load.error {
+  background: var(--color-neutral-light-gray);
+  opacity: 0.5;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

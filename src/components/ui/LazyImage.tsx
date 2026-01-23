@@ -9,6 +9,8 @@ interface LazyImageProps {
   height?: number;
   loading?: 'lazy' | 'eager';
   title?: string;
+  sizes?: string;
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 export function LazyImage({ 
@@ -19,7 +21,9 @@ export function LazyImage({
   width, 
   height,
   loading = 'lazy',
-  title
+  title,
+  sizes,
+  fetchPriority = 'auto'
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -34,6 +38,8 @@ export function LazyImage({
         width={width}
         height={height}
         loading={loading}
+        sizes={sizes}
+        fetchPriority={fetchPriority}
         decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => setIsError(true)}

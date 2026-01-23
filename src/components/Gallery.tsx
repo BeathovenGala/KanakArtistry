@@ -1,19 +1,18 @@
 import { motion } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { LazyImage } from './ui/LazyImage';
 import { setSEOTags, createProductSchema } from '../utils/seo';
-import artwork1 from '../assets/living_tree_of_grace.webp';
-import artwork2 from '../assets/Garden_of_living_light.webp';
-import artwork3 from '../assets/Light of the Lord.webp';
-import artwork4 from '../assets/Tree of Abundance.webp';
-import artwork5 from '../assets/The sacred rise of the lotus.webp';
-import artwork6 from '../assets/Above the garden dream.webp';
-import artwork7 from '../assets/Divya Gyaan.webp';
-import artwork8 from '../assets/Circle of Harmony.webp';
-import artwork9 from '../assets/Night Bloom.webp';
-import artwork10 from '../assets/Tree of Timeless Balance.webp';
-import artwork11 from '../assets/A Journey of Eternal Love & Divine Blessings.webp';
+import artwork1 from '../assets/webp/living_tree_of_grace.webp';
+import artwork2 from '../assets/webp/Garden_of_living_light.webp';
+import artwork3 from '../assets/webp/Light of the Lord.webp';
+import artwork4 from '../assets/webp/Tree of Abundance.webp';
+import artwork5 from '../assets/webp/The sacred rise of the lotus.webp';
+import artwork6 from '../assets/webp/Above the garden dream.webp';
+import artwork7 from '../assets/webp/Divya Gyaan.webp';
+import artwork8 from '../assets/webp/Circle of Harmony.webp';
+import artwork9 from '../assets/webp/Night Bloom.webp';
+import artwork10 from '../assets/webp/Tree of Timeless Balance.webp';
+import artwork11 from '../assets/webp/A Journey of Eternal Love & Divine Blessings.webp';
 
 const artworks = [
   {
@@ -147,14 +146,13 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
               className="group"
             >
               <div className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover">
-                <LazyImage
-                  src={art.image}
+                <img
+                  data-src={art.image}
                   alt={art.alt}
                   title={art.description}
-                  width={1400}
-                  height={1400}
-                  loading={index < 3 ? 'eager' : 'lazy'}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  width={800}
+                  height={800}
+                  className="lazy-load w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
               <div className="space-y-3">
