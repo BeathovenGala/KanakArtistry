@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { ImageLightbox } from './ImageLightbox';
 import { setSEOTags, createProductSchema } from '../utils/seo';
 import artwork1 from '../assets/webp/living_tree_of_grace.webp';
 import artwork2 from '../assets/webp/Garden_of_living_light.webp';
@@ -13,6 +14,7 @@ import artwork8 from '../assets/webp/Circle of Harmony.webp';
 import artwork9 from '../assets/webp/Night Bloom.webp';
 import artwork10 from '../assets/webp/Tree of Timeless Balance.webp';
 import artwork11 from '../assets/webp/A Journey of Eternal Love & Divine Blessings.webp';
+import artwork12 from '../assets/webp/The Infinite Balance.webp';
 
 const artworks = [
   {
@@ -103,6 +105,14 @@ const artworks = [
     description: 'Three canvas paintings that are more than colors on canvas—they capture a soulful journey of love, faith, and divine protection.',
     alt: 'A Journey of Eternal Love & Divine Blessings - Spiritual journey artwork triptych with flowing energy and divine blessings',
   },
+  {
+    id: 12,
+    image: artwork12,
+    title: 'The Infinite Balance',
+    medium: 'Plywood Painting',
+    description: 'A masterpiece created on plywood using diverse mediums to achieve intricate detailing and embossing effects. This conceptual artwork depicts universal abundance, harmony, and the interconnected energy of life.',
+    alt: 'The Infinite Balance - Intricate plywood artwork with embossed details depicting universal abundance and cosmic harmony',
+  },
 ];
 
 interface GalleryProps {
@@ -112,6 +122,26 @@ interface GalleryProps {
 
 export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string;
+    alt: string;
+    title: string;
+  } | null>(null);
+
+  const handleImageClick = (art: (typeof artworks)[0]) => {
+    setSelectedImage({
+      src: art.image,
+      alt: art.alt,
+      title: art.title,
+    });
+    setLightboxOpen(true);
+  };
+
+  const handleCloseLightbox = () => {
+    setLightboxOpen(false);
+    setTimeout(() => setSelectedImage(null), 300); // Wait for animation to finish
+  };
 
   return (
     <section id="gallery" ref={containerRef} className="py-24 bg-[var(--color-neutral-white)]">
@@ -145,14 +175,15 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover">
+              <div className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover cursor-pointer group">
                 <img
                   data-src={art.image}
                   alt={art.alt}
                   title={art.description}
                   width={800}
                   height={800}
-                  className="lazy-load w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  onClick={() => handleImageClick(art)}
+                  className="lazy-load w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 cursor-pointer"
                 />
               </div>
               <div className="space-y-3">
@@ -199,6 +230,17 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
           </motion.button>
           <div className="w-16 h-[1px] bg-[var(--color-gold)] mx-auto mt-8" />
         </motion.div>
+
+        {/* Lightbox Modal */}
+        {selectedImage && (
+          <ImageLightbox
+            src={selectedImage.src}
+            alt={selectedImage.alt}
+            title={selectedImage.title}
+            isOpen={lightboxOpen}
+            onClose={handleCloseLightbox}
+          />
+        )}
       </div>
     </section>
   );
