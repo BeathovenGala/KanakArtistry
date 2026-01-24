@@ -73,6 +73,69 @@ app.post("/make-server-ac147f29/inquiries", async (c) => {
   }
 });
 
+// Email inquiry via Resend
+app.post("/make-server-ac147f29/inquiries/email", async (c) => {
+  try {
+    const body = await c.req.json();
+
+    // Required fields
+    const required = ["name", "email", "artType", "message"] as const;
+    for (const f of required) {
+      if (!body[f] || typeof body[f] !== "string") {
+        return c.json({ success: false, error: `Missing field: ${f}` }, 400);
+      }
+    }
+
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    const DESTINATION_EMAIL = Deno.env.get("DESTINATION_EMAIL") || "contact@kanakartistry.com";
+
+    if (!RESEND_API_KEY) {
+      return c.json({ success: false, error: "RESEND_API_KEY not configured" }, 500);
+    }
+
+    const subject = `New Inquiry from ${body.name}`;
+    const html = `
+      <h2>New Inquiry</h2>
+      <p><strong>Name:</strong> ${body.name}</p>
+      <p><strong>Email:</strong> ${body.email}</p>
+      <p><strong>Phone:</strong> ${body.phone || "-"}</p>
+      <p><strong>Art Type:</strong> ${body.artType}</p>
+      <p><strong>Size:</strong> ${body.size || "-"}</p>
+      <p><strong>Budget:</strong> ${body.budget || "-"}</p>
+      <p><strong>Timeline:</strong> ${body.timeline || "-"}</p>
+      <p><strong>Message:</strong></p>
+      <pre style="white-space:pre-wrap;font-family:inherit;">${body.message}</pre>
+    `;
+
+    const payload = {
+      from: "KanakArtistry <no-reply@kanakartistry.com>",
+      to: DESTINATION_EMAIL,
+      subject,
+      html,
+    };
+
+    const resp = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!resp.ok) {
+      const text = await resp.text();
+      console.error("Resend error:", text);
+      return c.json({ success: false, error: "Failed to send email" }, 500);
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error("Email send error:", error);
+    return c.json({ success: false, error: `Error: ${error.message}` }, 500);
+  }
+});
+
 // Get all inquiries endpoint (for viewing all inquiries)
 app.get("/make-server-ac147f29/inquiries", async (c) => {
   try {

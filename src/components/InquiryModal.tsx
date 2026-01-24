@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { saveInquiry } from '../utils/supabase/client';
+import { saveInquiry, supabase } from '../utils/supabase/client';
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -38,7 +38,42 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
     setError(null);
 
     try {
-      await saveInquiry(formData);
+      // Save inquiry to database and get the full saved data
+      const savedInquiry = await saveInquiry(formData);
+
+      // Transform field names to what the edge function expects
+      const inquiryForEmail = {
+        name: savedInquiry?.name ?? formData.name,
+        email: savedInquiry?.email ?? formData.email,
+        phone: savedInquiry?.phone ?? formData.phone,
+        art_type: savedInquiry?.art_type ?? formData.artType,
+        size: savedInquiry?.size ?? formData.size,
+        budget: savedInquiry?.budget ?? formData.budget,
+        message: savedInquiry?.message ?? formData.message,
+        timeline: savedInquiry?.timeline ?? formData.timeline,
+        submitted_at: savedInquiry?.submitted_at ?? new Date().toISOString(),
+        ip_address: savedInquiry?.ip_address ?? '',
+        user_agent: savedInquiry?.user_agent ?? navigator.userAgent,
+      };
+
+      // Send instant email notification using Supabase client (handles CORS)
+      try {
+        const { data, error } = await supabase.functions.invoke('send-inquiry-notification', {
+          body: inquiryForEmail,
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+        });
+
+        if (error) {
+          console.warn('Instant email notification failed (non-critical):', error.message);
+        } else {
+          console.log('Instant email notification sent', data);
+        }
+      } catch (emailError) {
+        console.warn('Instant email notification failed (non-critical):', emailError);
+        // Don't fail the form submission if email fails
+      }
 
       console.log('Inquiry submitted successfully');
       setIsSubmitted(true);

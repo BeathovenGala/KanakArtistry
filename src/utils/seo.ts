@@ -17,8 +17,8 @@ export interface SEOMetaTags {
  * Update page meta tags for SEO
  */
 export function setSEOTags(seo: SEOMetaTags) {
-  // Set page title (no suffix)
-  document.title = seo.title;
+  // Set page title
+  document.title = `${seo.title} | KanakArtistry - Handmade Spiritual Art`;
 
   // Update or create meta tags
   updateMetaTag('description', seo.description);

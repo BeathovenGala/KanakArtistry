@@ -19,7 +19,7 @@ export default function App() {
   useEffect(() => {
     // Set comprehensive SEO tags for home page
     setSEOTags({
-      title: 'KanakArtistry',
+      title: 'KanakArtistry | Handmade Art & Commission Services',
       description: 'Discover authentic handmade artwork and commission services. Explore 11 unique handcrafted pieces including oil paintings, acrylic art, and mixed media.',
       keywords: ['handmade art', 'oil painting', 'acrylic art', 'art commission', 'custom artwork'],
       image: 'https://kanakartistry.com/og-image.jpg',
