@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Logo } from './Logo';
 
 interface NavigationProps {
   onInquireClick: () => void;
@@ -26,9 +27,12 @@ export function Navigation({ onInquireClick }: NavigationProps) {
     }
   };
 
-  const handleNavClick = (e: React.MouseEvent, id: string) => {
+  const handleNavClick = (e: any) => {
     e.preventDefault();
-    scrollToSection(id);
+    const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
+    if (href) {
+      scrollToSection(href.slice(1));
+    }
   };
 
   return (
@@ -43,13 +47,14 @@ export function Navigation({ onInquireClick }: NavigationProps) {
     >
       <div className="max-w-7xl mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo - Anchor for click-to-home + accessibility */}
           <a
             href="#home"
-            onClick={(e) => handleNavClick(e, 'home')}
-            className="text-2xl tracking-wide transition-colors duration-300"
+            onClick={handleNavClick}
+            aria-label="Go to Home"
+            className="cursor-pointer transition-opacity duration-300 hover:opacity-80"
           >
-            <span className="text-[var(--color-neutral-black)]">Kanak</span><span className="luxury-accent">Artistry</span>
+            <Logo />
           </a>
 
           {/* Desktop Navigation */}
