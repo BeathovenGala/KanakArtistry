@@ -34,12 +34,29 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submission started');
+
+    // Manual Validation
+    const missingFields = [];
+    if (!formData.name) missingFields.push('Name');
+    if (!formData.email) missingFields.push('Email');
+    if (!formData.phone) missingFields.push('Phone');
+    if (!formData.artType) missingFields.push('Art Type');
+    if (!formData.message) missingFields.push('Vision');
+
+    if (missingFields.length > 0) {
+      console.log('Validation failed:', missingFields);
+      setError(`Please fill in all required fields: ${missingFields.join(', ')}`);
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
     try {
-      // Save inquiry to database and get the full saved data
+      console.log('Sending data to Supabase...', formData);
       const savedInquiry = await saveInquiry(formData);
+      console.log('Supabase response:', savedInquiry);
 
       // Transform field names to what the edge function expects
       const inquiryForEmail = {
@@ -72,12 +89,11 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
         }
       } catch (emailError) {
         console.warn('Instant email notification failed (non-critical):', emailError);
-        // Don't fail the form submission if email fails
       }
 
       console.log('Inquiry submitted successfully');
       setIsSubmitted(true);
-      
+
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({
@@ -120,100 +136,97 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
           onClick={onClose}
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
+            id="inquiry-modal-content"
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto luxury-shadow"
+            className="bg-white w-[95%] sm:w-full max-w-2xl max-h-[90vh] overflow-y-auto luxury-shadow rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {!isSubmitted ? (
               <>
                 {/* Header */}
-                <div className="bg-[var(--color-primary-teal)] text-white p-10 relative">
+                <div className="bg-[var(--color-primary-teal)] text-white p-6 md:p-10 relative">
                   <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 text-white hover:opacity-70 transition-opacity"
+                    className="absolute top-4 right-4 text-white hover:opacity-70 transition-opacity p-2"
                   >
                     <X size={24} />
                   </button>
                   <div className="w-12 h-[1px] bg-[var(--color-gold)] mb-4" />
-                  <h3 className="text-white mb-2">Commission Your Artwork</h3>
-                  <p className="text-white/80">
+                  <h3 className="text-white mb-2 text-xl md:text-2xl">Commission Your Artwork</h3>
+                  <p className="text-white/80 text-sm md:text-base">
                     Let's create something unique together
                   </p>
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="p-10">
+                <form onSubmit={handleSubmit} className="p-6 md:p-10">
                   <div className="grid md:grid-cols-2 gap-6 mb-6">
                     <div>
                       <label htmlFor="name" className="block mb-2">
-                        <h6>Your Name *</h6>
+                        <h6 className="text-sm md:text-base">Your Name *</h6>
                       </label>
                       <input
                         type="text"
                         id="name"
                         name="name"
-                        required
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="Enter your name"
                       />
                     </div>
 
                     <div>
                       <label htmlFor="email" className="block mb-2">
-                        <h6>Email Address *</h6>
+                        <h6 className="text-sm md:text-base">Email Address *</h6>
                       </label>
                       <input
                         type="email"
                         id="email"
                         name="email"
-                        required
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="your.email@example.com"
                       />
                     </div>
 
                     <div>
                       <label htmlFor="phone" className="block mb-2">
-                        <h6>Phone Number *</h6>
+                        <h6 className="text-sm md:text-base">Phone Number *</h6>
                       </label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
-                        required
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="+91 XXXXX XXXXX"
                       />
                     </div>
 
                     <div>
                       <label htmlFor="artType" className="block mb-2">
-                        <h6>Art Type *</h6>
+                        <h6 className="text-sm md:text-base">Art Type *</h6>
                       </label>
                       <input
                         type="text"
                         id="artType"
                         name="artType"
-                        required
                         value={formData.artType}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="e.g., Madhubani, Mixed Media"
                       />
                     </div>
 
                     <div>
                       <label htmlFor="size" className="block mb-2">
-                        <h6>Preferred Size</h6>
+                        <h6 className="text-sm md:text-base">Preferred Size</h6>
                       </label>
                       <input
                         type="text"
@@ -221,21 +234,21 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         name="size"
                         value={formData.size}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="e.g., 24x36 inches"
                       />
                     </div>
 
                     <div>
                       <label htmlFor="timeline" className="block mb-2">
-                        <h6>Timeline</h6>
+                        <h6 className="text-sm md:text-base">Timeline</h6>
                       </label>
                       <select
                         id="timeline"
                         name="timeline"
                         value={formData.timeline}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors bg-white"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors bg-white text-base"
                       >
                         <option value="">When do you need it?</option>
                         <option value="flexible">Flexible</option>
@@ -249,7 +262,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
 
                   <div className="mb-6">
                     <label htmlFor="budget" className="block mb-2">
-                      <h6>Budget Range</h6>
+                      <h6 className="text-sm md:text-base">Budget Range</h6>
                     </label>
                     <input
                       type="text"
@@ -257,23 +270,22 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                       name="budget"
                       value={formData.budget}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                       placeholder="Your budget range"
                     />
                   </div>
 
                   <div className="mb-8">
                     <label htmlFor="message" className="block mb-2">
-                      <h6>Tell Me About Your Vision *</h6>
+                      <h6 className="text-sm md:text-base">Tell Me About Your Vision *</h6>
                     </label>
                     <textarea
                       id="message"
                       name="message"
-                      required
                       value={formData.message}
                       onChange={handleChange}
                       rows={5}
-                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors resize-none text-base"
                       placeholder="Describe your vision, color preferences, themes, or any specific ideas..."
                     />
                   </div>
@@ -282,8 +294,9 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700"
+                      className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded text-sm"
                     >
+                      <p className="font-semibold">Submission Error</p>
                       <p>{error}</p>
                     </motion.div>
                   )}
@@ -294,7 +307,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                     className="w-full px-8 py-4 bg-[var(--color-primary-teal)] text-white rounded-none hover:bg-[var(--color-primary-deep-teal)] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed luxury-shadow hover:luxury-shadow-hover"
                   >
                     <Send size={20} />
-                    <h5 className="text-white">{isSubmitting ? 'Sending...' : 'Send Inquiry'}</h5>
+                    <h5 className="text-white text-base">{isSubmitting ? 'Sending...' : 'Send Inquiry'}</h5>
                   </button>
 
                   <p className="text-center mt-6 text-sm text-[var(--color-neutral-gray)]">

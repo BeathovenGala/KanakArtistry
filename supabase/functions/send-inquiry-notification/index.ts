@@ -15,16 +15,16 @@ serve(async (req) => {
       return new Response("ok", { headers: corsHeaders });
     }
     console.log("=== DIAGNOSTIC: Function invoked ===");
-    
+
     // Get all secrets
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    
+
     console.log("Secret check - RESEND_API_KEY:", RESEND_API_KEY ? "✓ SET" : "✗ MISSING");
     console.log("Secret check - SUPABASE_URL:", SUPABASE_URL ? "✓ SET" : "✗ MISSING");
     console.log("Secret check - SUPABASE_SERVICE_KEY:", SUPABASE_SERVICE_KEY ? "✓ SET" : "✗ MISSING");
-    
+
     // Validate all secrets are present
     if (!RESEND_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
       const missing = [
@@ -32,7 +32,7 @@ serve(async (req) => {
         !SUPABASE_URL && "SUPABASE_URL",
         !SUPABASE_SERVICE_KEY && "SUPABASE_SERVICE_ROLE_KEY"
       ].filter(Boolean);
-      
+
       const errorMsg = `❌ MISSING SECRETS: ${missing.join(", ")}. Go to Supabase Dashboard → Settings → Vault and add them.`;
       console.error(errorMsg);
       return new Response(JSON.stringify({ error: errorMsg }), {
@@ -40,27 +40,27 @@ serve(async (req) => {
         status: 500,
       });
     }
-    
+
     // Parse request
     const inquiry = await req.json();
     console.log("✓ Inquiry data received");
-    
+
     // Initialize Supabase
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    
+
     // Get email recipient from config
     const { data: config, error: configError } = await supabase
       .from('email_config')
       .select('recipient_email')
       .single();
-    
+
     if (configError) {
       console.warn("⚠️ Could not fetch email_config:", configError.message);
     }
-    
-    const recipientEmail = config?.recipient_email || 'has132006@gmail.com';
+
+    const recipientEmail = config?.recipient_email || 'kanakartistry.art@gmail.com';
     console.log("📧 Recipient email:", recipientEmail);
-    
+
     // Format date in IST (use current time if submitted_at is missing)
     const submittedDate = inquiry.submitted_at ? new Date(inquiry.submitted_at) : new Date();
     const istDate = Intl.DateTimeFormat('en-IN', {
@@ -68,7 +68,7 @@ serve(async (req) => {
       timeStyle: 'short',
       timeZone: 'Asia/Kolkata'
     }).format(submittedDate);
-    
+
     // Send instant notification email via Resend API
     const emailHtml = `
         <!DOCTYPE html>
@@ -275,14 +275,14 @@ serve(async (req) => {
 
     // Call Resend API
     console.log("📤 Calling Resend API with from: onboarding@resend.dev");
-    
+
     const resendPayload = {
       from: "KanakArtistry <onboarding@resend.dev>",
       to: recipientEmail,
       subject: `🎨 New Art Inquiry from ${inquiry.name}`,
       html: emailHtml,
     };
-    
+
     const result = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -295,17 +295,17 @@ serve(async (req) => {
     // Get response details
     const responseText = await result.text();
     const responseStatus = result.status;
-    
+
     console.log("=== RESEND RESPONSE ===");
     console.log("Status:", responseStatus);
     console.log("Body:", responseText);
-    
+
     // Handle non-OK responses
     if (!result.ok) {
       console.error("❌ Resend API error:");
       console.error("Status code:", responseStatus);
       console.error("Response:", responseText);
-      
+
       return new Response(
         JSON.stringify({
           error: "Resend API failed",
@@ -320,7 +320,7 @@ serve(async (req) => {
     try {
       const resendData = JSON.parse(responseText);
       console.log("✅ Email sent successfully. Message ID:", resendData.id);
-      
+
       return new Response(JSON.stringify({ success: true, messageId: resendData.id, sentTo: recipientEmail }), {
         headers: { "Content-Type": "application/json", ...corsHeaders },
         status: 200,
@@ -336,7 +336,7 @@ serve(async (req) => {
     console.error('=== FATAL ERROR ===');
     console.error('Error:', error instanceof Error ? error.message : String(error));
     console.error('Stack:', error instanceof Error ? error.stack : 'N/A');
-    
+
     return new Response(
       JSON.stringify({
         error: "Internal server error",
