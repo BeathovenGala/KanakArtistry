@@ -34,6 +34,9 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Prevent event bubbling to modal background (which closes modal)
+    e.stopPropagation();
+
     console.log('Form submission started');
 
     // Manual Validation
@@ -133,7 +136,11 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-          onClick={onClose}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              onClose();
+            }
+          }}
         >
           <motion.div
             id="inquiry-modal-content"
@@ -319,7 +326,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-20 text-center"
+                className="p-10 md:p-20 text-center"
               >
                 <motion.div
                   initial={{ scale: 0 }}

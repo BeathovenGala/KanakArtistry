@@ -70,7 +70,7 @@ export function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="bg-white p-12 luxury-shadow">
+            <div className="bg-white p-6 md:p-12 luxury-shadow">
               <h3 className="mb-6">Artistic Philosophy</h3>
               <div className="w-12 h-[1px] bg-[var(--color-gold)] mb-8" />
               <p className="mb-6 leading-relaxed text-[var(--color-neutral-charcoal)]">
@@ -100,7 +100,7 @@ export function About() {
             transition={{ duration: 0.8 }}
             className="space-y-8"
           >
-            <div className="border border-[var(--color-gold-light)] p-10">
+            <div className="border border-[var(--color-gold-light)] p-6 md:p-10">
               <h4 className="mb-6 text-[var(--color-primary-teal)]">What We Create</h4>
               <ul className="space-y-4">
                 <li className="flex items-start gap-4">
@@ -121,8 +121,8 @@ export function About() {
                 </li>
               </ul>
             </div>
-            
-            <div className="bg-[var(--color-primary-teal)] p-10 text-white">
+
+            <div className="bg-[var(--color-primary-teal)] p-6 md:p-10 text-white">
               <h4 className="mb-4 text-white">Our Specialty</h4>
               <p className="text-white/90 leading-relaxed">
                 Each piece is a unique conversation between tradition and contemporary
@@ -133,7 +133,7 @@ export function About() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-24">
           {features.map((feature, index) => (
             <motion.div
               key={index}
@@ -141,7 +141,7 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="text-center p-8 bg-white luxury-shadow transition-all duration-300 hover:luxury-shadow-hover"
+              className="text-center p-6 md:p-8 bg-white luxury-shadow transition-all duration-300 hover:luxury-shadow-hover"
             >
               <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center border border-[var(--color-gold-light)]">
                 <feature.icon className="text-[var(--color-primary-teal)]" size={28} strokeWidth={1.5} />

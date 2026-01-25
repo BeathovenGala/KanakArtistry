@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ImageLightbox } from './ImageLightbox';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 import { setSEOTags, createProductSchema } from '../utils/seo';
 import artwork1 from '../assets/webp/living_tree_of_grace.webp';
 import artwork2 from '../assets/webp/Garden_of_living_light.webp';
@@ -175,17 +176,26 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover cursor-pointer group">
-                <img
-                  data-src={art.image}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleImageClick(art);
+                }}
+                className="relative aspect-square overflow-hidden bg-[var(--color-neutral-white)] mb-6 luxury-shadow transition-all duration-500 hover:luxury-shadow-hover cursor-pointer group w-full border-none p-0 bg-transparent"
+                type="button"
+                aria-label={`View ${art.title}`}
+              >
+                <ImageWithFallback
+                  src={art.image}
                   alt={art.alt}
                   title={art.description}
                   width={800}
                   height={800}
-                  onClick={() => handleImageClick(art)}
-                  className="lazy-load w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 cursor-pointer"
+                  loading="lazy"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 cursor-pointer pointer-events-none"
                 />
-              </div>
+              </button>
               <div className="space-y-3">
                 <h6 className="text-[var(--color-gold)] uppercase tracking-wider text-sm">
                   {art.medium}
@@ -195,7 +205,11 @@ export function Gallery({ onInquireClick, onInquireWithArtwork }: GalleryProps) 
                   {art.description}
                 </p>
                 <motion.button
-                  onClick={() => onInquireWithArtwork?.(art.title, art.medium)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onInquireWithArtwork?.(art.title, art.medium);
+                  }}
                   className="inline-flex items-center gap-2 text-[var(--color-primary-teal)] hover:text-[var(--color-gold)] transition-colors mt-4 group/btn"
                   whileHover={{ x: 4 }}
                 >
