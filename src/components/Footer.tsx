@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
-import { MapPin, Phone, Clock } from 'lucide-react';
+import { MapPin, Phone, Clock, Instagram, Youtube } from 'lucide-react';
+import logoText from '../assets/text.svg';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -23,14 +24,34 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h4 className="text-white mb-3">
-                Kanak<span className="luxury-accent">Artistry</span>
-              </h4>
+              <img src={logoText} alt="Kanak Artistry" className="h-12 mb-6 grayscale brightness-0 invert" />
               <div className="w-12 h-[1px] bg-[var(--color-gold)] mb-4" />
               <p className="text-white/60 leading-relaxed">
                 Creating unique, handcrafted conceptual art pieces that tell your
                 story through color, texture, and emotion.
               </p>
+
+              {/* Social Links */}
+              <div className="flex gap-4 mt-6">
+                <a
+                  href="https://www.instagram.com/kanak.artistry?igsh=MXc2d2RyM2pkOXgwcA=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/60 hover:text-[var(--color-gold)] transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={20} />
+                </a>
+                <a
+                  href="https://youtube.com/@kanakartistry?si=DsVAwEhc99zAfw9c"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/60 hover:text-[var(--color-gold)] transition-colors"
+                  aria-label="YouTube"
+                >
+                  <Youtube size={24} />
+                </a>
+              </div>
             </motion.div>
           </div>
 
@@ -86,7 +107,8 @@ export function Footer() {
                 <Clock size={16} className="text-[var(--color-gold)] mt-1 flex-shrink-0" strokeWidth={1.5} />
                 <p className="leading-relaxed">
                   Mon - Fri<br />
-                  10:00 AM - 4:00 PM
+                  10:00 AM - 4:00 PM<br />
+                  <span className="text-[var(--color-gold)] italic text-xs block mt-1">Available by appointment only</span>
                 </p>
               </div>
             </div>

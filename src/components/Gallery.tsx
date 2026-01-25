@@ -110,7 +110,7 @@ const artworks = [
     id: 12,
     image: artwork12,
     title: 'The Infinite Balance',
-    medium: 'Plywood Painting',
+    medium: 'Painting on plywood',
     description: 'A masterpiece created on plywood using diverse mediums to achieve intricate detailing and embossing effects. This conceptual artwork depicts universal abundance, harmony, and the interconnected energy of life.',
     alt: 'The Infinite Balance - Intricate plywood artwork with embossed details depicting universal abundance and cosmic harmony',
   },

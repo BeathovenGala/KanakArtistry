@@ -7,10 +7,11 @@ const styles = [
   'Relief Art',
   'Acrylic',
   'Textured Art',
-  'Madhubani',
-  'Warli',
+  'Madhubani Painting',
+  'Warli Art',
   'Gond Art',
   'Lippan Art',
+  'Folk Art',
 ];
 
 const features = [
@@ -86,9 +87,7 @@ export function About() {
                 truly one-of-a-kind.
               </p>
               <p className="leading-relaxed text-[var(--color-neutral-charcoal)]">
-                From the intricate patterns of Madhubani to the bold textures of
-                contemporary mixed media, we bring diverse techniques together to
-                create something entirely personal and meaningful.
+                Patterns of Folk Art to the bold textures of contemporary mixed media, we bring diverse techniques together to create something entirely personal and meaningful.
               </p>
             </div>
           </motion.div>
