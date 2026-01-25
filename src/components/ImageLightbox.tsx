@@ -75,10 +75,9 @@ export function ImageLightbox({ src, alt, title, isOpen, onClose }: ImageLightbo
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mt-6 text-center"
+                className="mt-6 text-center bg-black/80 backdrop-blur-sm rounded-lg p-4"
               >
                 <h3 className="text-white mb-2">{title}</h3>
-                <p className="text-[var(--color-gold)] text-sm">Click to close or press ESC</p>
               </motion.div>
             </motion.div>
           </motion.div>
