@@ -34,6 +34,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsSubmitting(true);
     setError(null);
 
@@ -77,7 +78,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
 
       console.log('Inquiry submitted successfully');
       setIsSubmitted(true);
-      
+
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({
@@ -117,7 +118,11 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-          onClick={onClose}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              onClose();
+            }
+          }}
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
@@ -125,15 +130,18 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto luxury-shadow"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
           >
             {!isSubmitted ? (
               <>
                 {/* Header */}
-                <div className="bg-[var(--color-primary-teal)] text-white p-10 relative">
+                <div className="bg-[var(--color-primary-teal)] text-white p-6 md:p-10 relative">
                   <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 text-white hover:opacity-70 transition-opacity"
+                    className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:opacity-70 transition-opacity"
                   >
                     <X size={24} />
                   </button>
@@ -145,7 +153,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="p-10">
+                <form onSubmit={handleSubmit} className="p-6 md:p-10">
                   <div className="grid md:grid-cols-2 gap-6 mb-6">
                     <div>
                       <label htmlFor="name" className="block mb-2">
@@ -158,7 +166,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="Enter your name"
                       />
                     </div>
@@ -174,7 +182,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="your.email@example.com"
                       />
                     </div>
@@ -190,7 +198,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         required
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="+91 XXXXX XXXXX"
                       />
                     </div>
@@ -206,7 +214,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         required
                         value={formData.artType}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="e.g., Madhubani, Mixed Media"
                       />
                     </div>
@@ -221,7 +229,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         name="size"
                         value={formData.size}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                         placeholder="e.g., 24x36 inches"
                       />
                     </div>
@@ -235,7 +243,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                         name="timeline"
                         value={formData.timeline}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors bg-white"
+                        className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors bg-white text-base"
                       >
                         <option value="">When do you need it?</option>
                         <option value="flexible">Flexible</option>
@@ -257,7 +265,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                       name="budget"
                       value={formData.budget}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors"
+                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors text-base"
                       placeholder="Your budget range"
                     />
                   </div>
@@ -273,7 +281,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
                       value={formData.message}
                       onChange={handleChange}
                       rows={5}
-                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 border border-[var(--color-neutral-light-gray)] focus:border-[var(--color-primary-teal)] focus:outline-none transition-colors resize-none text-base"
                       placeholder="Describe your vision, color preferences, themes, or any specific ideas..."
                     />
                   </div>
@@ -306,7 +314,7 @@ export function InquiryModal({ isOpen, onClose, initialArtType = '', initialMedi
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-20 text-center"
+                className="p-10 md:p-20 text-center"
               >
                 <motion.div
                   initial={{ scale: 0 }}

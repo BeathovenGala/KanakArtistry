@@ -39,7 +39,11 @@ export function ImageLightbox({ src, alt, title, isOpen, onClose }: ImageLightbo
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                onClose();
+              }
+            }}
             className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           >
             {/* Image Container */}
@@ -48,12 +52,19 @@ export function ImageLightbox({ src, alt, title, isOpen, onClose }: ImageLightbo
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               className="relative max-w-4xl max-h-[90vh] w-full flex flex-col"
             >
               {/* Close Button */}
               <button
-                onClick={onClose}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onClose();
+                }}
                 className="absolute -top-12 right-0 text-white hover:text-[var(--color-gold)] transition-colors z-10"
                 aria-label="Close lightbox"
               >

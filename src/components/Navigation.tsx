@@ -16,23 +16,57 @@ export function Navigation({ onInquireClick }: NavigationProps) {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
     }
+    return () => {
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const scrollToSection = (id: string) => {
+    console.log('Scrolling to:', id);
+    
+    // Close mobile menu first to unlock body scroll
+    setIsMobileMenuOpen(false);
+    
+    // Small delay to ensure body is unlocked and layout is restored before scrolling
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start'
+        });
+      } else {
+        console.warn('Section not found:', id);
+      }
+    }, 100);
   };
 
-  const handleNavClick = (e: any) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
     if (href) {
       scrollToSection(href.slice(1));
     }
+  };
+
+  // Simplified: Remove the separate event handler, just call scrollToSection directly
+  const handleMenuItemClick = (id: string) => {
+    scrollToSection(id);
   };
 
   return (
@@ -62,7 +96,7 @@ export function Navigation({ onInquireClick }: NavigationProps) {
             {['home', 'about', 'gallery', 'contact'].map((item) => (
               <button
                 key={item}
-                onClick={() => scrollToSection(item)}
+                onClick={() => handleMenuItemClick(item)}
                 className="capitalize text-[var(--color-neutral-charcoal)] hover:text-[var(--color-gold)] transition-colors tracking-wider text-sm uppercase"
               >
                 {item}
@@ -78,10 +112,12 @@ export function Navigation({ onInquireClick }: NavigationProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className={`md:hidden transition-colors duration-300 ${
+            className={`md:hidden transition-colors duration-300 z-50 ${
               isScrolled ? 'text-[var(--color-neutral-black)]' : 'text-[var(--color-neutral-black)]'
             }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -95,14 +131,15 @@ export function Navigation({ onInquireClick }: NavigationProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-[var(--color-neutral-light-gray)]"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="md:hidden bg-white border-b border-[var(--color-neutral-light-gray)] overflow-hidden"
           >
             <div className="px-6 py-6 flex flex-col gap-4">
               {['home', 'about', 'gallery', 'contact'].map((item) => (
                 <button
                   key={item}
-                  onClick={() => scrollToSection(item)}
-                  className="capitalize text-left text-[var(--color-neutral-charcoal)] hover:text-[var(--color-gold)] transition-colors tracking-wider text-sm uppercase"
+                  onClick={() => handleMenuItemClick(item)}
+                  className="capitalize text-left text-[var(--color-neutral-charcoal)] hover:text-[var(--color-gold)] transition-colors tracking-wider text-sm uppercase w-full py-2"
                 >
                   {item}
                 </button>
@@ -112,7 +149,7 @@ export function Navigation({ onInquireClick }: NavigationProps) {
                   onInquireClick();
                   setIsMobileMenuOpen(false);
                 }}
-                className="px-8 py-3 bg-[var(--color-primary-teal)] text-white rounded-none hover:bg-[var(--color-primary-deep-teal)] transition-colors text-center text-sm uppercase tracking-wider"
+                className="px-8 py-3 bg-[var(--color-primary-teal)] text-white rounded-none hover:bg-[var(--color-primary-deep-teal)] transition-colors text-center text-sm uppercase tracking-wider w-full"
               >
                 Inquire
               </button>

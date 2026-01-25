@@ -71,11 +71,10 @@ export function Contact({ onInquireClick }: ContactProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               onClick={() => handleContactClick(item)}
-              className={`bg-[var(--color-neutral-white)] p-8 luxury-shadow transition-all duration-300 ${
-                item.link || item.action
+              className={`bg-[var(--color-neutral-white)] p-6 md:p-8 luxury-shadow transition-all duration-300 ${item.link || item.action
                   ? 'cursor-pointer hover:luxury-shadow-hover hover:border-[var(--color-gold)] border border-transparent'
                   : 'border border-transparent'
-              }`}
+                }`}
             >
               <div className="w-12 h-12 flex items-center justify-center border border-[var(--color-gold-light)] mb-6">
                 <item.icon className="text-[var(--color-primary-teal)]" size={20} strokeWidth={1.5} />
@@ -92,7 +91,7 @@ export function Contact({ onInquireClick }: ContactProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-[var(--color-neutral-white)] py-16 px-12 text-center luxury-shadow"
+          className="bg-[var(--color-neutral-white)] py-16 px-6 md:px-12 text-center luxury-shadow"
         >
           <h3 className="mb-6">Are you looking for Bespoke Artwork?</h3>
           <p className="max-w-2xl mx-auto mb-10 text-lg text-[var(--color-neutral-gray)]">
@@ -102,7 +101,7 @@ export function Contact({ onInquireClick }: ContactProps) {
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <motion.button
               onClick={onInquireClick}
-              className="px-12 py-4 bg-[var(--color-primary-teal)] text-white rounded-none transition-all duration-300 luxury-shadow hover:luxury-shadow-hover hover:bg-[var(--color-primary-deep-teal)]"
+              className="w-full sm:w-auto px-6 md:px-12 py-4 bg-[var(--color-primary-teal)] text-white rounded-none transition-all duration-300 luxury-shadow hover:luxury-shadow-hover hover:bg-[var(--color-primary-deep-teal)]"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -110,7 +109,7 @@ export function Contact({ onInquireClick }: ContactProps) {
             </motion.button>
             <motion.a
               href="tel:+918758046166"
-              className="px-12 py-4 border border-[var(--color-neutral-charcoal)] text-[var(--color-neutral-charcoal)] rounded-none transition-all duration-300 hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] inline-flex items-center justify-center"
+              className="w-full sm:w-auto px-6 md:px-12 py-4 border border-[var(--color-neutral-charcoal)] text-[var(--color-neutral-charcoal)] rounded-none transition-all duration-300 hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] inline-flex items-center justify-center"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
