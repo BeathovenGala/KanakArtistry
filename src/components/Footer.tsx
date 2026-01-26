@@ -17,27 +17,27 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
           {/* Brand */}
-          <div>
+          <div className="lg:col-span-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <img src={logoText} alt="Kanak Artistry" className="h-12 mb-6 grayscale brightness-0 invert" />
+              <img src={logoText} alt="Kanak Artistry" className="h-10 md:h-12 mb-6 grayscale brightness-0 invert" />
               <div className="w-12 h-[1px] bg-[var(--color-gold)] mb-4" />
-              <p className="text-white/60 leading-relaxed">
+              <p className="text-white/60 leading-relaxed max-w-sm mb-6">
                 Creating unique, handcrafted conceptual art pieces that tell your
                 story through color, texture, and emotion.
               </p>
 
               {/* Social Links */}
-              <div className="flex gap-4 mt-6">
+              <div className="flex gap-4">
                 <a
                   href="https://www.instagram.com/kanak.artistry?igsh=MXc2d2RyM2pkOXgwcA=="
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-[var(--color-gold)] transition-colors"
+                  className="p-2 border border-white/20 rounded-full hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] text-white/60 transition-colors"
                   aria-label="Instagram"
                 >
                   <Instagram size={20} />
@@ -46,10 +46,10 @@ export function Footer() {
                   href="https://youtube.com/@kanakartistry?si=DsVAwEhc99zAfw9c"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-[var(--color-gold)] transition-colors"
+                  className="p-2 border border-white/20 rounded-full hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] text-white/60 transition-colors"
                   aria-label="YouTube"
                 >
-                  <Youtube size={24} />
+                  <Youtube size={20} />
                 </a>
               </div>
             </motion.div>
@@ -71,7 +71,7 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Art Styles */}
+          {/* Specialties */}
           <div>
             <h5 className="text-white mb-6 uppercase tracking-wider text-sm">Specialties</h5>
             <div className="flex flex-col gap-2 text-white/60 text-sm">
@@ -80,6 +80,7 @@ export function Footer() {
               <p>Acrylic Painting</p>
               <p>Madhubani</p>
               <p>Contemporary Art</p>
+              <p>Folk Art</p>
             </div>
           </div>
 

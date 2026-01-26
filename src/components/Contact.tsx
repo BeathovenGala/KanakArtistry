@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { MapPin, Phone, Clock, Mail } from 'lucide-react';
+import { MapPin, Phone, Clock, Mail, Instagram, Youtube } from 'lucide-react';
 
 interface ContactProps {
   onInquireClick: () => void;
@@ -72,8 +72,8 @@ export function Contact({ onInquireClick }: ContactProps) {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               onClick={() => handleContactClick(item)}
               className={`bg-[var(--color-neutral-white)] p-6 md:p-8 luxury-shadow transition-all duration-300 ${item.link || item.action
-                  ? 'cursor-pointer hover:luxury-shadow-hover hover:border-[var(--color-gold)] border border-transparent'
-                  : 'border border-transparent'
+                ? 'cursor-pointer hover:luxury-shadow-hover hover:border-[var(--color-gold)] border border-transparent'
+                : 'border border-transparent'
                 }`}
             >
               <div className="w-12 h-12 flex items-center justify-center border border-[var(--color-gold-light)] mb-6">
@@ -137,6 +137,41 @@ export function Contact({ onInquireClick }: ContactProps) {
               <p className="text-[var(--color-neutral-gray)]">{stat.label}</p>
             </div>
           ))}
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mt-20 text-center"
+        >
+          <h5 className="mb-8 tracking-widest uppercase text-[var(--color-neutral-charcoal)]">Follow Our Journey</h5>
+          <div className="flex justify-center gap-8">
+            <a
+              href="https://www.instagram.com/kanak.artistry?igsh=MXc2d2RyM2pkOXgwcA=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col items-center gap-3 text-[var(--color-neutral-gray)] hover:text-[var(--color-primary-teal)] transition-colors"
+            >
+              <div className="p-4 border border-[var(--color-neutral-light-gray)] rounded-full group-hover:border-[var(--color-primary-teal)] transition-colors luxury-shadow group-hover:luxury-shadow-hover bg-white">
+                <Instagram size={28} strokeWidth={1.5} />
+              </div>
+              <span className="text-sm uppercase tracking-wider">Instagram</span>
+            </a>
+            <a
+              href="https://youtube.com/@kanakartistry?si=DsVAwEhc99zAfw9c"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col items-center gap-3 text-[var(--color-neutral-gray)] hover:text-[var(--color-primary-teal)] transition-colors"
+            >
+              <div className="p-4 border border-[var(--color-neutral-light-gray)] rounded-full group-hover:border-[var(--color-primary-teal)] transition-colors luxury-shadow group-hover:luxury-shadow-hover bg-white">
+                <Youtube size={28} strokeWidth={1.5} />
+              </div>
+              <span className="text-sm uppercase tracking-wider">YouTube</span>
+            </a>
+          </div>
         </motion.div>
       </div>
     </section>
