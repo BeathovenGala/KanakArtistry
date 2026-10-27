@@ -48,18 +48,20 @@ serve(async (req) => {
     // Initialize Supabase
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-    // Get email recipient from config
-    const { data: config, error: configError } = await supabase
+    // Get email recipients from config
+    const { data: configs, error: configError } = await supabase
       .from('email_config')
-      .select('recipient_email')
-      .single();
+      .select('recipient_email');
 
     if (configError) {
       console.warn("⚠️ Could not fetch email_config:", configError.message);
     }
 
-    const recipientEmail = config?.recipient_email || 'kanakartistry.art@gmail.com';
-    console.log("📧 Recipient email:", recipientEmail);
+    let recipientEmails = configs?.map(c => c.recipient_email).filter(Boolean) || [];
+    if (recipientEmails.length === 0) {
+      recipientEmails = ['kanakartistry.art@gmail.com'];
+    }
+    console.log("📧 Recipient emails:", recipientEmails.join(", "));
 
     // Format date in IST (use current time if submitted_at is missing)
     const submittedDate = inquiry.submitted_at ? new Date(inquiry.submitted_at) : new Date();
@@ -277,8 +279,8 @@ serve(async (req) => {
     console.log("📤 Calling Resend API with from: onboarding@resend.dev");
 
     const resendPayload = {
-      from: "KanakArtistry <onboarding@resend.dev>",
-      to: recipientEmail,
+      from: "KanakArtistry <info@kanakartistry.in>",
+      to: recipientEmails,
       subject: `🎨 New Art Inquiry from ${inquiry.name}`,
       html: emailHtml,
     };
@@ -321,13 +323,13 @@ serve(async (req) => {
       const resendData = JSON.parse(responseText);
       console.log("✅ Email sent successfully. Message ID:", resendData.id);
 
-      return new Response(JSON.stringify({ success: true, messageId: resendData.id, sentTo: recipientEmail }), {
+      return new Response(JSON.stringify({ success: true, messageId: resendData.id, sentTo: recipientEmails }), {
         headers: { "Content-Type": "application/json", ...corsHeaders },
         status: 200,
       });
     } catch (parseError) {
       console.log("✅ Email sent (could not parse response ID)");
-      return new Response(JSON.stringify({ success: true, sentTo: recipientEmail }), {
+      return new Response(JSON.stringify({ success: true, sentTo: recipientEmails }), {
         headers: { "Content-Type": "application/json", ...corsHeaders },
         status: 200,
       });

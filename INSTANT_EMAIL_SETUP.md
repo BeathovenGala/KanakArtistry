@@ -129,16 +129,14 @@ Form submitted
 
 ### Change Email Recipient
 
-**Option 1: Via Admin Dashboard**
-1. Press `Ctrl + Shift + A` on your website
-2. Go to "Email Configuration"
-3. Update email address
-4. Both instant and daily emails will use new address
+### Change Email Recipient
+You can manage email recipients directly in your Supabase database. The system now supports **multiple recipients** - simply add more rows to the table!
 
-**Option 2: Via Supabase**
-1. Go to Table Editor → `email_config` table
-2. Update `recipient_email` field
-3. Both systems read from same config
+**Via Supabase Dashboard**
+1. Go to **Table Editor** → `email_config` table
+2. **To change:** Update the `recipient_email` field of an existing row
+3. **To add more:** Click "Insert new row" and add another email address
+4. Both instant and daily emails will be sent to ALL addresses in this table
 
 ### Current Settings
 - **Recipient**: `has132006@gmail.com`
